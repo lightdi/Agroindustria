@@ -27,6 +27,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOGIN_URL = '/login/'
+
+AUTH_USER_MODEL = 'controle.Usuario'
+
 
 # Application definition
 
