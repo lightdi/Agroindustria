@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-hf_h^*miqm0j%7hbh@@bb#v%ul##_@8dx3dw0r%35w1%u)5x#-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['agroindustria.onrender.com']
 
 LOGIN_URL = '/login/'
 
