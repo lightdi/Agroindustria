@@ -74,7 +74,7 @@ def excluir_projeto(request, id):
 ##Carregand os dados do projeto
 @login_required
 def projeto(request, id):
-    analises = Analise.objects.all().order_by('-id')
+    analises = Analise.objects.all().filter(projeto_id = id ).order_by('-id')
     return render(request, "projeto.html", {"analises": analises, "projeto_id": id})
 
 
@@ -122,55 +122,52 @@ def excluir_analise(request, projeto_id, id):
     return redirect('analise', id=projeto_id)  # Redireciona    
 
 @login_required
-def analise(request, id):
-    amostras = Amostra.objects.all()
-    return render(request, "amostra.html", {"amostras": amostras})
+def analise(request, projeto_id,id):
+    amostras = Amostra.objects.all().filter(analise_id = id ).order_by('-id')
+    return render(request, "amostra.html", {"amostras": amostras, "projeto_id": projeto_id, "analise_id": id})
 
 @login_required
-def criar_amostra(request, analise_id):
+def criar_amostra(request, projeto_id,analise_id):
     analise = get_object_or_404(Analise, id=analise_id)  # Obtém a análise
 
     if request.method == "POST":
         form = AmostraForm(request.POST, analise=analise)  # Passa a análise ao formulário
         if form.is_valid():
             form.save(usuario=request.user)  # Passa o usuário logado
-            return redirect('detalhes_analise', analise_id=analise.id)  # Redireciona após salvar
+            return redirect('amostras', projeto_id = projeto_id, id=analise.id)  # Redireciona após salvar
     else:
         form = AmostraForm(analise=analise)  # Passa a análise ao formulário
 
-    return render(request, 'amostra_form.html', {'form': form, 'analise': analise})
+    return render(request, 'criar_amostra.html', {'form': form, 'analise': analise, 'projeto_id': projeto_id, 'analise_id': analise_id})
 
 @login_required
-def editar_amostra(request, id):
-    projeto = get_object_or_404(Projeto, id=id)
+def editar_amostra(request, projeto_id, analise_id, id):
+    amostra = get_object_or_404(Amostra, id=id)
 
     if request.method == 'POST':
-        form = ProjetoForm(request.POST, instance=projeto)
+        form = AmostraForm(request.POST, instance=amostra)
         if form.is_valid():
             # Atribui o usuário logado ao campo 'alterado_por'
-            projeto = form.save(commit=False)  # Não salva automaticamente
-            projeto.alterado_por = request.user  # Atribui o usuário logado
-            projeto.save()  # Salva o projeto com a alteração do usuário
-            return redirect('index')  # Redireciona para a lista de projetos
+            amostra = form.save(commit=False)  # Não salva automaticamente
+            amostra.alterado_por = request.user  # Atribui o usuário logado
+            amostra.save()  # Salva o projeto com a alteração do usuário
+            return redirect('amostras', projeto_id = projeto_id, id=analise_id)  # Redireciona após salvar
     else:
-        print(projeto.data)
-        form = ProjetoForm(instance=projeto)
-        form.fields['data'].initial = '2020-11-11'#projeto.data.strftime('%Y-%m-%d')
-        print(form.fields['data'].initial)
+        form = AmostraForm(instance=amostra)
 
-    return render(request, 'editar_projeto.html', {'form': form, 'projeto': projeto})
+    return render(request, 'editar_amostra.html', {'form': form, 'amostra': amostra, 'projeto_id': projeto_id, 'analise_id': analise_id})
 
 @login_required
-def excluir_amostra(request, id):
-    # Verifica se o usuário é administrador
-    if not request.user.administrador:
-        messages.error(request, "Você não tem permissão para excluir projetos.")
-        return redirect('index')  # Redireciona de volta para a página inicial ou outra página desejada
+def excluir_amostra(request, projeto_id,analise_id, id):
 
-    projeto = get_object_or_404(Projeto, id=id)
+
+    projeto = get_object_or_404(Amostra, id=id)
 
     # Exclui o projeto
     projeto.delete()
 
     messages.success(request, "Projeto excluído com sucesso.")
-    return redirect('index')
+    return redirect('amostras', projeto_id = projeto_id, id=analise_id)  # Redireciona após salvar
+
+def acesso_negado(request):
+    return render(request, 'acesso_negado.html')

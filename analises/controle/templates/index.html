@@ -36,8 +36,6 @@
 
         {% if user.administrador %}
             <a href="/adicionar_projeto" class="btn btn-primary mb-3">Adicionar Novo Projeto</a>
-        {% else %}
-            Nada
         {% endif %}
 
         <ul class="list-group">
@@ -47,9 +45,9 @@
                         <h4>{{ projeto.nome }}</h4>
                     </span>
                     
-                    {% if user == projeto.criado_por or projeto.permissao_projeto.all|length > 0 %}
-                        <a href="/projeto/{{ projeto.id }}" class="btn btn-info btn-sm">Entrar</a>
-                    {% endif %}
+                  
+                    <a href="/projeto/{{ projeto.id }}" class="btn btn-info btn-sm">Entrar</a>
+                    
                     
                     {% if user == projeto.criado_por or user.administrador %}
                         <a href="/editar_projeto/{{ projeto.id }}" class="btn btn-warning btn-sm">Editar</a>

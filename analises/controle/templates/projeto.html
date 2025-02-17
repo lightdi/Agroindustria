@@ -37,8 +37,7 @@
 
         {% if user.administrador %}
             <a href="/criar_analise/{{projeto_id}}" class="btn btn-primary mb-3">Adicionar Nova Análise</a>
-        {% else %}
-            Nada
+
         {% endif %}
 
         <ul class="list-group">
@@ -51,7 +50,7 @@
                     
                     <div>
                        
-                        <a href="/analise/{{ analise.id }}" class="btn btn-info btn-sm">Entrar</a>
+                        <a href="/projeto/{{projeto_id}}/analise/{{ analise.id }}" class="btn btn-info btn-sm">Entrar</a>
                         <a href="/projeto/{{projeto_id}}/editar_analise/{{ analise.id }}" class="btn btn-warning btn-sm">Editar</a>
                         <!-- Botão de exclusão com confirmação -->
                         <form action="/projeto/{{projeto_id}}/excluir_analise/{{ analise.id }}" method="GET" style="display:inline;" onsubmit="return confirmarExclusao();">
