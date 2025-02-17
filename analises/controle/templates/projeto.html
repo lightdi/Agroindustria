@@ -7,6 +7,7 @@
 </head>
 <body>
     <h1>Analises realizadas </h1>
+    <p>{{ form.data.value }}</p>  <!-- Depuração -->
     <ul> 
         {% for analise in analises  %}
             <li> 
@@ -15,6 +16,8 @@
                 </a>
             </li>
         {% endfor %}
+
+  
     </ul>
     </body>
 </html>
